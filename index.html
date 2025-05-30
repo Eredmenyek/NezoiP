@@ -96,12 +96,7 @@
     .green-9 { background-color: #DFFF00 !important; color: black !important; font-weight: bold; }
     .green-10 { background-color: #F0FFF0 !important; color: black !important; font-weight: bold; }
 
-    .team-logo {
-      width: 38px;
-      height: auto;
-      margin-left: 5px;
-      vertical-align: middle;
-    }
+    
 
     .track-img {
       width: 80px;
@@ -127,8 +122,8 @@
         <th>Sprint időmérő</th>
         <th>Kvalifikáció</th>
         <th>Verseny</th>
-        <th>Vb helyezés</th>
-        <th>Csapat</th>
+        <th>Tabella</th>
+        
       </tr>
     </thead>
     <tbody></tbody>
@@ -146,19 +141,7 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
-  const teamLogos = {
-    "mercedes": "https://imgs.search.brave.com/0uowM9cLK1zxEJGZ2hJv_LT-13wxX9VHY3nWXQwiT7E/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9icmFu/ZGxvZ28ub3JnL3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDI0LzA0/L01lcmNlZGVzLUFN/Ry1QZXRyb25hcy1G/MS1UZWFtLUxvZ28u/cG5n",
-    "red bull": "https://imgs.search.brave.com/uJ1IW2YYRnsAjCX0bP_9FnO_kQQvnf1M-66kY_wVz6o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzQwLzEvcmVkLWJ1/bGwtcmFjaW5nLWYx/LWxvZ28tcG5nX3Nl/ZWtsb2dvLTQwNjc5/Ni5wbmc",
-    "ferrari": "https://imgs.search.brave.com/qyZFHbZRxsY_q__9Lv9uDhadC-BImNgwyEtg49WAgcQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9sb2dv/cy13b3JsZC5uZXQv/d3AtY29udGVudC91/cGxvYWRzLzIwMjAv/MDYvRmVycmFyaS1T/Y3VkZXJpYS1FbWJs/ZW0tNzAweDM5NC5w/bmc",
-    "mclaren": "https://imgs.search.brave.com/MnOgmPoJ0lkT3FsrFgfp8oHqvsKvGDarmtUOxVpQTfw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9mYWJy/aWticmFuZHMuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy9NY0xh/cmVuLUxvZ28tOC0x/MjAweDc1MC5wbmc",
-    "aston martin": "https://imgs.search.brave.com/37mFWIyRGr60Y_0efLvmuX3brGCko9hBFnzEK1eHmdQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zcG9y/dGNvbG9yY29kZXMu/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI0LzA1L0FzdG9u/LU1hcnRpbi1GMS1U/ZWFtLXBuZy1sb2dv/LnBuZw",
-    "alpine": "https://imgs.search.brave.com/LaUmjAhTNFEreFXgnu8_sbH5r5Ln4CE5wvAMBoX93dU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzQwLzEvYWxwaW5l/LWYxLXRlYW0tbG9n/by1wbmdfc2Vla2xv/Z28tNDAzODg2LnBu/Zw",
-    "williams": "https://imgs.search.brave.com/SFjPHnIiLGxCOyqgpiDoaLXeF853Bi9Qg_N7k9GRUW0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9icmFu/ZGxvZ28ub3JnL3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDI0LzA0/L1dpbGxpYW1zLVJh/Y2luZy1Mb2dvLnBu/Zw",
-    "vcarb": "https://imgs.search.brave.com/bBb7CJYfWsfDrfnPusrH3aXIYO4YjxpV6yUXGRsnPak/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzU2LzEvdmlzYS1j/YXNoLWFwcC1yYi1m/b3JtdWxhLW9uZS10/ZWFtLWxvZ28tcG5n/X3NlZWtsb2dvLTU2/NjIwMy5wbmc",
-    "kick sauber": "https://imgs.search.brave.com/ZN4Z9dp7Qt7MAqyUbTAj4iN4sCeK8jgrhDGyMnyzjYI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9l/L2U0L0xvZ29fb2Zf/U3Rha2VfRjFfVGVh/bV9LaWNrX1NhdWJl/ci5wbmc",
-    "haas": "https://imgs.search.brave.com/dJf6SzjL-ryrPK2d0XY9zeCqoG4faEx7UfXXKLbBKbE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9icmFu/ZGxvZ29zLm5ldC93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMi8x/MC9oYWFzX2YxX3Rl/YW0tbG9nb19icmFu/ZGxvZ29zLm5ldF9k/d3huNS0zMDB4MzAw/LnBuZw" ,
-	"cadillac": "https://i.imgur.com/EddS3gI.png"
-  };
+  
 
 
   const races = [
@@ -274,8 +257,8 @@
         <td ${hasSprint ? 'contenteditable="false"' : 'class="disabled"'} id="cell-${index}-sprintqual"></td>
         <td contenteditable="false" id="cell-${index}-qual"></td>
         <td contenteditable="false" id="cell-${index}-race"></td>
-        <td contenteditable="false" id="cell-${index}-egyeni"></td>
-        <td contenteditable="false" id="cell-${index}-csapat"></td>
+        <td contenteditable="false" id="cell-${index}-tabella"></td>
+        
       `;
       tableBody.appendChild(tr);
 
@@ -309,5 +292,6 @@
   switchSeason(1);
 </script>
 </body>
+</html>
 </html>
 
