@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadillac F1 Team – 2025 Eredmények</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: url("https://imgs.search.brave.com/QkFGfHtPGGiEc9XliQFZt3vDR9Bla_TaRPmgLWfDPZU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jYWRp/bGxhY3NvY2lldHku/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI0LzA1L0dNLUNh/ZGlsbGFjLUYxLUZv/cm11bGEtT25lLXJh/Y2UtY2FyLWNsb3Nl/LXVwLXBvd2VyLXVu/aXQtbWFudWZhY3R1/cmVyLTAwMS0xMDI0/eDY4My5qcGc") no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    .container {
+      background: transparent;
+      padding: 20px;
+      max-width: 1200px;
+      width: 95%;
+      margin: 50px auto;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .nav {
+      margin-bottom: 20px;
+    }
+
+    .nav button {
+      margin: 0 10px;
+      padding: 8px 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .nav button:hover {
+      background-color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: rgba(230, 230, 230, 0.95);
+      color: black;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border: 1px solid #aaa;
+      padding: 8px;
+      text-align: center;
+      user-select: text;
+    }
+
+    th {
+      background-color: #222;
+      color: #fff;
+    }
+
+    td[contenteditable="true"] {
+      background-color: #f9f9f9;
+      cursor: text;
+    }
+
+    td.disabled {
+      background-color: #222;
+      color: #aaa;
+      cursor: not-allowed;
+      font-style: italic;
+    }
+
+    .gold { background-color: gold !important; color: black !important; font-weight: bold; }
+    .silver { background-color: silver !important; color: black !important; font-weight: bold; }
+    .bronze { background-color: #cd7f32 !important; color: black !important; font-weight: bold; }
+    .dnf { background-color: #c00 !important; color: white !important; font-weight: bold; }
+
+    .green-4 { background-color: #006400 !important; color: white !important; font-weight: bold; }
+    .green-5 { background-color: #228B22 !important; color: white !important; font-weight: bold; }
+    .green-6 { background-color: #32CD32 !important; color: black !important; font-weight: bold; }
+    .green-7 { background-color: #7CFC00 !important; color: black !important; font-weight: bold; }
+    .green-8 { background-color: #ADFF2F !important; color: black !important; font-weight: bold; }
+    .green-9 { background-color: #DFFF00 !important; color: black !important; font-weight: bold; }
+    .green-10 { background-color: #F0FFF0 !important; color: black !important; font-weight: bold; }
+
+    .team-logo {
+      width: 38px;
+      height: auto;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    .track-img {
+      width: 80px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 id="title">Cadillac F1 Team – 1. Szezon</h1>
+  <div class="nav">
+    <button onclick="switchSeason(1)">1. Szezon</button>
+    <button onclick="switchSeason(2)">2. Szezon</button>
+  </div>
+  <table id="results-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nagydíj</th>
+        <th>Helyszín</th>
+        <th>Pályarajz</th>
+        <th>Sprint</th>
+        <th>Sprint időmérő</th>
+        <th>Kvalifikáció</th>
+        <th>Verseny</th>
+        <th>Egyéni</th>
+        <th>Csapat</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBtWYLAHfvJvkFKHb9JvErm-2G5Mei_l64",
+    authDomain: "eredmenyek-5ebb7.firebaseapp.com",
+    projectId: "eredmenyek-5ebb7"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const teamLogos = {
+    "mercedes": "https://imgs.search.brave.com/0uowM9cLK1zxEJGZ2hJv_LT-13wxX9VHY3nWXQwiT7E/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9icmFu/ZGxvZ28ub3JnL3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDI0LzA0/L01lcmNlZGVzLUFN/Ry1QZXRyb25hcy1G/MS1UZWFtLUxvZ28u/cG5n",
+    "red bull": "https://imgs.search.brave.com/uJ1IW2YYRnsAjCX0bP_9FnO_kQQvnf1M-66kY_wVz6o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzQwLzEvcmVkLWJ1/bGwtcmFjaW5nLWYx/LWxvZ28tcG5nX3Nl/ZWtsb2dvLTQwNjc5/Ni5wbmc",
+    "ferrari": "https://imgs.search.brave.com/qyZFHbZRxsY_q__9Lv9uDhadC-BImNgwyEtg49WAgcQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9sb2dv/cy13b3JsZC5uZXQv/d3AtY29udGVudC91/cGxvYWRzLzIwMjAv/MDYvRmVycmFyaS1T/Y3VkZXJpYS1FbWJs/ZW0tNzAweDM5NC5w/bmc",
+    "mclaren": "https://imgs.search.brave.com/MnOgmPoJ0lkT3FsrFgfp8oHqvsKvGDarmtUOxVpQTfw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9mYWJy/aWticmFuZHMuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy9NY0xh/cmVuLUxvZ28tOC0x/MjAweDc1MC5wbmc",
+    "aston martin": "https://imgs.search.brave.com/37mFWIyRGr60Y_0efLvmuX3brGCko9hBFnzEK1eHmdQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zcG9y/dGNvbG9yY29kZXMu/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI0LzA1L0FzdG9u/LU1hcnRpbi1GMS1U/ZWFtLXBuZy1sb2dv/LnBuZw",
+    "alpine": "https://imgs.search.brave.com/LaUmjAhTNFEreFXgnu8_sbH5r5Ln4CE5wvAMBoX93dU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzQwLzEvYWxwaW5l/LWYxLXRlYW0tbG9n/by1wbmdfc2Vla2xv/Z28tNDAzODg2LnBu/Zw",
+    "williams": "https://imgs.search.brave.com/SFjPHnIiLGxCOyqgpiDoaLXeF853Bi9Qg_N7k9GRUW0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9icmFu/ZGxvZ28ub3JnL3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDI0LzA0/L1dpbGxpYW1zLVJh/Y2luZy1Mb2dvLnBu/Zw",
+    "vcarb": "https://imgs.search.brave.com/bBb7CJYfWsfDrfnPusrH3aXIYO4YjxpV6yUXGRsnPak/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzU2LzEvdmlzYS1j/YXNoLWFwcC1yYi1m/b3JtdWxhLW9uZS10/ZWFtLWxvZ28tcG5n/X3NlZWtsb2dvLTU2/NjIwMy5wbmc",
+    "kick sauber": "https://imgs.search.brave.com/ZN4Z9dp7Qt7MAqyUbTAj4iN4sCeK8jgrhDGyMnyzjYI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9l/L2U0L0xvZ29fb2Zf/U3Rha2VfRjFfVGVh/bV9LaWNrX1NhdWJl/ci5wbmc",
+    "haas": "https://imgs.search.brave.com/dJf6SzjL-ryrPK2d0XY9zeCqoG4faEx7UfXXKLbBKbE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9icmFu/ZGxvZ29zLm5ldC93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMi8x/MC9oYWFzX2YxX3Rl/YW0tbG9nb19icmFu/ZGxvZ29zLm5ldF9k/d3huNS0zMDB4MzAw/LnBuZw" ,
+	"cadillac": "https://imgs.search.brave.com/ntFaVFrF3XsMsYhdwqGdwYw5CO36aYSoNoVk7aGOdT8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cmV1dGVycy5jb20v/cmVzaXplci92Mi9B/TlQ0S1FVMzNCTUFG/UERNTFVVMkFOS0NK/VS5qcGc_YXV0aD0z/YWIxYzRmOWJmZTcw/MzdkZGZkMGVhOTdi/MzExZWViZDFiZmZm/ZWU5ZmIxZDAzZWRi/Zjk3NzQwOWM5MDdh/NWEzJndpZHRoPTEw/ODAmcXVhbGl0eT04/MA"
+  };
+
+
+  const races = [
+    ["Ausztrál", "Melbourne", false],
+    ["Kínai", "Sanghaj", true],
+    ["Japán", "Szuzuka", false],
+    ["Bahreini", "Szahír", false],
+    ["Szaúd-arábiai", "Dzsidda", false],
+    ["Miami", "Miami", true],
+    ["Emilia-Romagna", "Imola", false],
+    ["Monacói", "Monaco", false],
+    ["Spanyol", "Barcelona", false],
+    ["Kanadai", "Montreal", false],
+    ["Osztrák", "Spielberg", false],
+    ["Brit", "Silverstone", false],
+    ["Belga", "Spa-Francorchamps", true],
+    ["Magyar", "Mogyoród", false],
+    ["Holland", "Zandvoort", false],
+    ["Olasz", "Monza", false],
+    ["Azerbajdzsáni", "Baku", false],
+    ["Szingapúri", "Szingapúr", false],
+    ["USA", "Austin", true],
+    ["Mexikói", "Mexikóváros", false],
+    ["São Paulo-i", "São Paulo", true],
+    ["Las Vegas-i", "Las Vegas", false],
+    ["Qatar-i", "Lasoil", false],
+    ["Abu Dzabi", "Abu Dzabi", false]
+  ];
+
+  const trackLayouts = {
+    "Melbourne": { img: "https://imgs.search.brave.com/fne8b9dxbGoJjj858jKPO0VEgSOsqrw1qZDNdxKghZg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvQXVzdHJh/bGlhX0NpcmN1aXQ", wiki: "https://hu.wikipedia.org/wiki/Ausztrál_Nagydíj" },
+    "Sanghaj": { img: "https://imgs.search.brave.com/E9ZmFiLjTNz_KqOKAgxtbWjq2obDKLfl4lyKlzmja-M/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvQ2hpbmFf/Q2lyY3VpdA", wiki: "https://hu.wikipedia.org/wiki/Formula%E2%80%931_k%C3%ADnai_nagyd%C3%ADj" },
+    "Szuzuka": { img: "https://imgs.search.brave.com/XtlLo30TJsP4DnRnOzNcEnmjx9jFa271z0pgcc39iiA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vdF8x/NmJ5OUNlbnRyZS9m/X2F1dG8vcV9hdXRv/L2NvbnRlbnQvZGFt/L2ZvbS13ZWJzaXRl/LzIwMTgtcmVkZXNp/Z24tYXNzZXRzL0Np/cmN1aXQlMjBtYXBz/JTIwMTZ4OS9KYXBh/bl9DaXJjdWl0", wiki: "https://hu.wikipedia.org/wiki/Japán_Nagydíj" },
+    "Szahír": { img: "https://imgs.search.brave.com/Ek6A0BGoryI9HzNEO6vapJkP21DNmDhyGNqPZVDxlGQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHFfYXV0/byx3XzEzMjAvY29u/dGVudC9kYW0vZm9t/LXdlYnNpdGUvMjAx/OC1yZWRlc2lnbi1h/c3NldHMvQ2lyY3Vp/dCUyMG1hcHMlMjAx/Nng5L0JhaHJhaW5f/Q2lyY3VpdA", wiki: "https://hu.wikipedia.org/wiki/Bahreini_Nagydíj" },
+    "Dzsidda": { img: "https://imgs.search.brave.com/Ked4Lrpqr_n3Lfu7Q2ilfb-KvR-B9xNYYJJb8rRTrqc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHFfYXV0/byx3XzEzMjAvY29u/dGVudC9kYW0vZm9t/LXdlYnNpdGUvMjAx/OC1yZWRlc2lnbi1h/c3NldHMvQ2lyY3Vp/dCUyMG1hcHMlMjAx/Nng5L1NhdWRpX0Fy/YWJpYV9DaXJjdWl0", wiki: "https://en.wikipedia.org/wiki/Saudi_Arabian_Grand_Prix" },
+    "Miami": { img: "https://imgs.search.brave.com/9ROubV736KlMoKUxfxRyaSgXKOk8_OhxGb_2qBc2KrM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vdF8x/NmJ5OUNlbnRyZS9m/X2F1dG8vcV9hdXRv/L2NvbnRlbnQvZGFt/L2ZvbS13ZWJzaXRl/LzIwMTgtcmVkZXNp/Z24tYXNzZXRzL0Np/cmN1aXQlMjBtYXBz/JTIwMTZ4OS9NaWFt/aV9DaXJjdWl0", wiki: "https://en.wikipedia.org/wiki/Miami_Grand_Prix" },
+    "Imola": { img: "https://imgs.search.brave.com/eB69u4dgHCq8MDzGt9JNKYe6StV5E-ZleUKB59-5Hh0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHFfYXV0/byx3XzEzMjAvY29u/dGVudC9kYW0vZm9t/LXdlYnNpdGUvMjAx/OC1yZWRlc2lnbi1h/c3NldHMvQ2lyY3Vp/dCUyMG1hcHMlMjAx/Nng5L0VtaWxpYV9S/b21hZ25hX0NpcmN1/aXQ", wiki: "https://en.wikipedia.org/wiki/Emilia_Romagna_Grand_Prix" },
+    "Monaco": { img: "https://imgs.search.brave.com/gbVeY8_A9Rk7cGEzMhfINgLBMztgKDjyDIVGRIuATXw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvTW9uYWNv/X0NpcmN1aXQ", wiki: "https://hu.wikipedia.org/wiki/Monacói_Nagydíj" },
+    "Barcelona": { img: "https://imgs.search.brave.com/5CYK3ThheBz66SE1PKj2wmW5kGvYnDer2543C7MaRxg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vdF8x/NmJ5OUNlbnRyZS9m/X2F1dG8vcV9hdXRv/L2NvbnRlbnQvZGFt/L2ZvbS13ZWJzaXRl/LzIwMTgtcmVkZXNp/Z24tYXNzZXRzL0Np/cmN1aXQlMjBtYXBz/JTIwMTZ4OS9TcGFp/bl9DaXJjdWl0", wiki: "https://hu.wikipedia.org/wiki/Spanyol_Nagydíj" },
+    "Montreal": { img: "https://imgs.search.brave.com/hTn5czQ_XU7WhkGXCn38jf8XXS9FsHhCPscjX4jzQn8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvQ2FuYWRh/X0NpcmN1aXQ", wiki: "https://hu.wikipedia.org/wiki/Kanadai_Nagydíj" },
+    "Spielberg": { img: "https://imgs.search.brave.com/44IwjJsfVPm66hflPVjzy3vqVLinX7vBR1zwnwAtPM8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvQXVzdHJp/YV9DaXJjdWl0", wiki: "https://hu.wikipedia.org/wiki/Osztrák_Nagydíj" },
+    "Silverstone": { img: "https://imgs.search.brave.com/SlZhQLsmzCh3Z0yC7Dyx1op9FvI71-JS5A6kMLxsJCU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvR3JlYXRf/QnJpdGFpbl9DaXJj/dWl0", wiki: "https://hu.wikipedia.org/wiki/Brit_Nagydíj" },
+    "Spa-Francorchamps": { img: "https://imgs.search.brave.com/W9WH4_YdTPnOhQTaZwZN0Im2g3xKB2psHPOaRVc1Ag0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvQmVsZ2l1/bV9DaXJjdWl0", wiki: "https://hu.wikipedia.org/wiki/Belga_Nagydíj" },
+    "Mogyoród": { img: "https://imgs.search.brave.com/eRHPE9tsfNAczlNYC7OIwikxcXDTBT8ExPvPmV0kGpI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvSHVuZ2Fy/eV9DaXJjdWl0", wiki: "https://hu.wikipedia.org/wiki/Magyar_Nagydíj" },
+    "Zandvoort": { img: "https://imgs.search.brave.com/h9SJvCXvlbb-ZfCeLithFv2TSOqbdCmupNrPkL5BdeM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvTmV0aGVy/bGFuZHNfQ2lyY3Vp/dA", wiki: "https://hu.wikipedia.org/wiki/Holland_Nagydíj" },
+    "Monza": { img: "https://imgs.search.brave.com/e1CHFYm2AN7r9I3B7fObmmI9J04Xqs3D0C2EbkUe8dY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvSXRhbHlf/Q2lyY3VpdA", wiki: "https://hu.wikipedia.org/wiki/Olasz_Nagydíj" },
+    "Baku": { img: "https://imgs.search.brave.com/5o868GkqMlBiS8c6HJNj8okjcyfqKP7S_uk6GPs3diM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvQmFrdV9D/aXJjdWl0", wiki: "https://en.wikipedia.org/wiki/Azerbaijan_Grand_Prix" },
+    "Szingapúr": { img: "https://imgs.search.brave.com/GGP8ahk2TQcDI-Iso2wsUs5cLRm3LNgvawPxeJD6XTA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvU2luZ2Fw/b3JlX0NpcmN1aXQ", wiki: "https://hu.wikipedia.org/wiki/Szingapúri_Nagydíj" },
+    "Austin": { img: "https://imgs.search.brave.com/3Ic_buDyYZv3uIvgeo7_NN7K2E521bv6pyCNUklC468/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHFfYXV0/byx3XzEzMjAvY29u/dGVudC9kYW0vZm9t/LXdlYnNpdGUvMjAx/OC1yZWRlc2lnbi1h/c3NldHMvQ2lyY3Vp/dCUyMG1hcHMlMjAx/Nng5L1VTQV9DaXJj/dWl0", wiki: "https://en.wikipedia.org/wiki/United_States_Grand_Prix" },
+    "Mexikóváros": { img: "https://imgs.search.brave.com/wn4eaBRgr3_o2ajWlXF3lmupUEtb3PWRZByZn141Y30/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHFfYXV0/byx3XzEzMjAvY29u/dGVudC9kYW0vZm9t/LXdlYnNpdGUvMjAx/OC1yZWRlc2lnbi1h/c3NldHMvQ2lyY3Vp/dCUyMG1hcHMlMjAx/Nng5L01leGljb19D/aXJjdWl0", wiki: "https://hu.wikipedia.org/wiki/Mexikói_Nagydíj" },
+    "São Paulo": { img: "https://imgs.search.brave.com/Fk_eWNhj59puojaEpj4k8RiYo2qltznQEik-0IH0E8k/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vdF8x/NmJ5OUNlbnRyZS9m/X2F1dG8vcV9hdXRv/L2NvbnRlbnQvZGFt/L2ZvbS13ZWJzaXRl/LzIwMTgtcmVkZXNp/Z24tYXNzZXRzL0Np/cmN1aXQlMjBtYXBz/JTIwMTZ4OS9CcmF6/aWxfQ2lyY3VpdA", wiki: "https://hu.wikipedia.org/wiki/Brazil_Nagydíj" },
+    "Las Vegas": { img: "https://imgs.search.brave.com/dDKzofMdLkF2gpdkPwF36KNoqaMD2MMbSGY1lBPphQ4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHFfYXV0/byx3XzEzMjAvY29u/dGVudC9kYW0vZm9t/LXdlYnNpdGUvMjAx/OC1yZWRlc2lnbi1h/c3NldHMvQ2lyY3Vp/dCUyMG1hcHMlMjAx/Nng5L0xhc19WZWdh/c19DaXJjdWl0", wiki: "https://hu.wikipedia.org/wiki/Las_Vegas-i_Nagydíj" },
+    "Lasoil": { img: "https://imgs.search.brave.com/biCwakzRghAeCJyRNOiHf_iA73ybN2I62ROx8feBiR0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHFfYXV0/byx3XzEzMjAvY29u/dGVudC9kYW0vZm9t/LXdlYnNpdGUvMjAx/OC1yZWRlc2lnbi1h/c3NldHMvQ2lyY3Vp/dCUyMG1hcHMlMjAx/Nng5L1FhdGFyX0Np/cmN1aXQ", wiki: "https://en.wikipedia.org/wiki/Qatar_Grand_Prix" },
+    "Abu Dzabi": { img: "https://imgs.search.brave.com/jg_TYbSprEI6-TWgqcgCHk3h0h1_KprMRZFUqUvynU8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5mb3JtdWxhMS5j/b20vaW1hZ2UvdXBs/b2FkL2ZfYXV0byxj/X2xpbWl0LHdfMTQ0/MCxxX2F1dG8vZl9h/dXRvL3FfYXV0by9j/b250ZW50L2RhbS9m/b20td2Vic2l0ZS8y/MDE4LXJlZGVzaWdu/LWFzc2V0cy9DaXJj/dWl0JTIwbWFwcyUy/MDE2eDkvQWJ1X0Ro/YWJpX0NpcmN1aXQ", wiki: "https://en.wikipedia.org/wiki/Abu_Dhabi_Grand_Prix" }
+  };
+
+  let currentSeason = 1;
+  let unsubscribeFns = [];
+
+  function switchSeason(season) {
+    currentSeason = season;
+    document.getElementById("title").innerText = `Cadillac F1 Team – ${season}. Szezon`;
+    unsubscribeFns.forEach(unsub => unsub());
+    unsubscribeFns = [];
+    buildTable();
+  }
+
+  function applyStyle(cell) {
+    const value = cell.innerText.trim().toUpperCase();
+    cell.className = "";
+    if (value === "1") cell.classList.add("gold");
+    else if (value === "2") cell.classList.add("silver");
+    else if (value === "3") cell.classList.add("bronze");
+    else if (value === "DNF") cell.classList.add("dnf");
+    else if (!isNaN(value) && +value >= 4 && +value <= 10) cell.classList.add(`green-${value}`);
+  }
+
+  function addTeamLogo(cell) {
+    const value = cell.innerText.trim().toLowerCase();
+    const logo = teamLogos[value];
+    const existingImg = cell.querySelector("img");
+    if (existingImg) existingImg.remove();
+    if (logo) {
+      cell.innerText = "";
+      const img = document.createElement("img");
+      img.src = logo;
+      img.className = "team-logo";
+      cell.appendChild(img);
+    }
+  }
+
+  function buildTable() {
+    const tableBody = document.querySelector("#results-table tbody");
+    tableBody.innerHTML = "";
+    const collection = currentSeason === 1 ? "results" : "results_s2";
+
+    races.forEach((race, index) => {
+      const [name, location, hasSprint] = race;
+      const track = trackLayouts[location];
+      const trackHTML = track
+        ? `<a href="${track.wiki}" target="_blank" title="${track.wiki}">
+             <img src="${track.img}" class="track-img" alt="${location} pályarajz">
+           </a>`
+        : "";
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${name}</td>
+        <td>${location}</td>
+        <td>${trackHTML}</td>
+        <td ${hasSprint ? 'contenteditable="false"' : 'class="disabled"'} id="cell-${index}-sprint"></td>
+        <td ${hasSprint ? 'contenteditable="false"' : 'class="disabled"'} id="cell-${index}-sprintqual"></td>
+        <td contenteditable="false" id="cell-${index}-qual"></td>
+        <td contenteditable="false" id="cell-${index}-race"></td>
+        <td contenteditable="false" id="cell-${index}-egyeni"></td>
+        <td contenteditable="false" id="cell-${index}-csapat"></td>
+      `;
+      tableBody.appendChild(tr);
+
+      ["sprint", "sprintqual", "qual", "race", "egyeni", "csapat"].forEach(type => {
+        const cellId = `cell-${index}-${type}`;
+        const cell = document.getElementById(cellId);
+        if (!cell || cell.classList.contains("disabled")) return;
+
+        cell.addEventListener("input", () => {
+          const value = cell.innerText.trim();
+          db.collection(collection).doc(cellId).set({ value });
+          applyStyle(cell);
+          if (type === "csapat") addTeamLogo(cell);
+        });
+
+        const unsub = db.collection(collection).doc(cellId).onSnapshot(doc => {
+          if (doc.exists) {
+            const value = doc.data().value || "";
+            if (cell.innerText.trim() !== value) {
+              cell.innerText = value;
+              applyStyle(cell);
+              if (type === "csapat") addTeamLogo(cell);
+            }
+          }
+        });
+        unsubscribeFns.push(unsub);
+      });
+    });
+  }
+
+  switchSeason(1);
+</script>
+</body>
+</html>
+
