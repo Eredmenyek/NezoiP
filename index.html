@@ -5,9 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2025-ös eredmények/MyTeam, Career</title>
   <style>
+  body.career-mode {
+  background-image: url('https://imgs.search.brave.com/4qVEO_oRTHm6hT8-GETrAM9crLjKVs2-IGsz1ZG3_-Y/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9naWZk/Yi5jb20vaW1hZ2Vz/L2hpZ2gvZjEtdmVy/c3RhcHBlbi12ZXJz/dXMtaGFtaWx0b24t/OGczOXRoNGJtZ3px/bmZ0aC5naWY.gif'); no-repeat center center fixed;
+}
+
+body.myteam-mode {
+  background-image: url('https://imgs.search.brave.com/QkFGfHtPGGiEc9XliQFZt3vDR9Bla_TaRPmgLWfDPZU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jYWRp/bGxhY3NvY2lldHku/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI0LzA1L0dNLUNh/ZGlsbGFjLUYxLUZv/cm11bGEtT25lLXJh/Y2UtY2FyLWNsb3Nl/LXVwLXBvd2VyLXVu/aXQtbWFudWZhY3R1/cmVyLTAwMS0xMDI0/eDY4My5qcGc'); no-repeat center center fixed;
+}
     body {
-      background: url("https://imgs.search.brave.com/QkFGfHtPGGiEc9XliQFZt3vDR9Bla_TaRPmgLWfDPZU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jYWRp/bGxhY3NvY2lldHku/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI0LzA1L0dNLUNh/ZGlsbGFjLUYxLUZv/cm11bGEtT25lLXJh/Y2UtY2FyLWNsb3Nl/LXVwLXBvd2VyLXVu/aXQtbWFudWZhY3R1/cmVyLTAwMS0xMDI0/eDY4My5qcGc") no-repeat center center fixed;
-      background-size: cover;
+     background-size: cover;
       color: white;
       font-family: Arial, sans-serif;
       margin: 0;
@@ -15,8 +21,28 @@
       justify-content: center;
       align-items: flex-start;
       padding: 40px 0;
-      min-height: 100vh;
+      height: 100%;
     }
+	@media (max-width: 600px) {
+  h2 {
+    font-size: 18px;
+  }
+
+  .season-buttons button,
+  .career-buttons button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 4px;
+    font-size: 12px;
+  }
+
+  input {
+    font-size: 12px;
+  }
+}
     .container {
       background: transparent;
       color: white;
@@ -162,16 +188,16 @@ input {
       <div class="mode-label">
         <strong>Driver Career:</strong>
         <div class="career-buttons">
-          <button id="career-1">1.szezon</button>
-          <button id="career-2">2.szezon</button>
-          <button id="career-3">3.szezon</button>
+          <button id="career-1">1</button>
+          <button id="career-2">2</button>
+          <button id="career-3">3</button>
         </div>
       </div>
       <div class="mode-label">
         <strong>MyTeam:</strong>
         <div class="season-buttons">
-          <button id="myteam-1">1.szezon</button>
-          <button id="myteam-2">2.szezon</button>
+          <button id="myteam-1">1</button>
+          <button id="myteam-2">2</button>
         </div>
       </div>
     </div>
@@ -306,6 +332,8 @@ input {
       updateTitle();
       activateButtonGroup("myteam", mode === "myteam" ? season : 0);
       activateButtonGroup("career", mode === "career" ? season : 0);
+	  document.body.classList.remove("career-mode", "myteam-mode");
+document.body.classList.add(`${mode}-mode`);
 
       const docSnap = await getDoc(getDocRef());
       const data = docSnap.exists() ? docSnap.data() : {};
@@ -367,7 +395,6 @@ input {
     loadTable();
   </script>
 </body>
-</html>
 </html>
 </html>
 
