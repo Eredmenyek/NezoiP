@@ -6,7 +6,7 @@
   <title>2025-ös eredmények/MyTeam, Career</title>
   <style>
   body.career-mode {
-  background-image: url('https://imgs.search.brave.com/4qVEO_oRTHm6hT8-GETrAM9crLjKVs2-IGsz1ZG3_-Y/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9naWZk/Yi5jb20vaW1hZ2Vz/L2hpZ2gvZjEtdmVy/c3RhcHBlbi12ZXJz/dXMtaGFtaWx0b24t/OGczOXRoNGJtZ3px/bmZ0aC5naWY.gif'); no-repeat center center fixed;
+  background-image: url('https://imgs.search.brave.com/nO1_huMx8rJaTzCCeLLXV3E4oJxzmEaO9V5lbN8zpxc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuZGF6bnNlcnZp/Y2VzLmNvbS9kaS9s/aWJyYXJ5L0RBWk5f/TmV3cy85NC9hYi92/aXNhLWNhc2gtYXBw/LXJiLWYxLXRlYW1f/MXY0NWNvNWxndTR6/bzFldWxjeXZ2M21u/MzEuanBnP3Q9NDQ5/ODg1NzU3'); no-repeat center center fixed;
 }
 
 body.myteam-mode {
@@ -188,16 +188,16 @@ input {
       <div class="mode-label">
         <strong>Driver Career:</strong>
         <div class="career-buttons">
-          <button id="career-1">1.szezon</button>
-          <button id="career-2">2.szezon</button>
-          <button id="career-3">3.szezon</button>
+          <button id="career-1">1</button>
+          <button id="career-2">2</button>
+          <button id="career-3">3</button>
         </div>
       </div>
       <div class="mode-label">
         <strong>MyTeam:</strong>
         <div class="season-buttons">
-          <button id="myteam-1">1.szezon</button>
-          <button id="myteam-2">2.szezon</button>
+          <button id="myteam-1">1</button>
+          <button id="myteam-2">2</button>
         </div>
       </div>
     </div>
@@ -291,8 +291,8 @@ input {
   };
 
 
-    let mode = "myteam"; //Hol nyiljon meg 
-    let season = 2;
+    let mode = "career"; //Hol nyiljon meg 
+    let season = 1;
 
     const tableBody = document.getElementById("table-body");
     const title = document.getElementById("title");
