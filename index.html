@@ -5,14 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2025-ös eredmények/MyTeam, Career</title>
   <style>
-  body.career-mode {
-  background-image: url('https://imgs.search.brave.com/7XxdqzF2gICE0AL91osm5_cQ7S1PNCF7KfcvzVaD5d4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTM1/MzExMjYyNi92ZWN0/b3IvZGFyay1ibHVl/LWRlLWZvY3VzZWQt/Ymx1cnJlZC1tb3Rp/b24tYWJzdHJhY3Qt/YmFja2dyb3VuZC5q/cGc_cz02MTJ4NjEy/Jnc9MCZrPTIwJmM9/cGZtV3EzeDRLSWNi/emlDUkRhcXk5amJK/c0o4djFHS1pObEg4/RFhZOW54QT0'); no-repeat center center fixed;
-}
-
-body.myteam-mode {
-  background-image: url('https://imgs.search.brave.com/QkFGfHtPGGiEc9XliQFZt3vDR9Bla_TaRPmgLWfDPZU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jYWRp/bGxhY3NvY2lldHku/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI0LzA1L0dNLUNh/ZGlsbGFjLUYxLUZv/cm11bGEtT25lLXJh/Y2UtY2FyLWNsb3Nl/LXVwLXBvd2VyLXVu/aXQtbWFudWZhY3R1/cmVyLTAwMS0xMDI0/eDY4My5qcGc'); no-repeat center center fixed;
-}
-    body {
+     body {
      background-size: cover;
       color: white;
       font-family: Arial, sans-serif;
@@ -293,17 +286,39 @@ input {
 
     let mode = "career"; //Hol nyiljon meg 
     let season = 1;
+	//csapat
+	const customTitles = {
+  myteam: {
+    1: "MyTeam - Cadillac (1. szezon)",
+    2: "MyTeam - Cadillac (2. szezon)"
+  },
+  career: {
+    1: "Karrier - Visa Rb ",
+    2: "Karrier - ",
+    3: "Karrier - "
+  }
+};
+//háttér
+const backgroundImages = {
+  myteam: {
+    1: "https://imgs.search.brave.com/QkFGfHtPGGiEc9XliQFZt3vDR9Bla_TaRPmgLWfDPZU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jYWRp/bGxhY3NvY2lldHku/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI0LzA1L0dNLUNh/ZGlsbGFjLUYxLUZv/cm11bGEtT25lLXJh/Y2UtY2FyLWNsb3Nl/LXVwLXBvd2VyLXVu/aXQtbWFudWZhY3R1/cmVyLTAwMS0xMDI0/eDY4My5qcGc",
+    2: "https://imgs.search.brave.com/QkFGfHtPGGiEc9XliQFZt3vDR9Bla_TaRPmgLWfDPZU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jYWRp/bGxhY3NvY2lldHku/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI0LzA1L0dNLUNh/ZGlsbGFjLUYxLUZv/cm11bGEtT25lLXJh/Y2UtY2FyLWNsb3Nl/LXVwLXBvd2VyLXVu/aXQtbWFudWZhY3R1/cmVyLTAwMS0xMDI0/eDY4My5qcGc"
+  },
+  career: {
+    1: "https://imgs.search.brave.com/7XxdqzF2gICE0AL91osm5_cQ7S1PNCF7KfcvzVaD5d4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTM1/MzExMjYyNi92ZWN0/b3IvZGFyay1ibHVl/LWRlLWZvY3VzZWQt/Ymx1cnJlZC1tb3Rp/b24tYWJzdHJhY3Qt/YmFja2dyb3VuZC5q/cGc_cz02MTJ4NjEy/Jnc9MCZrPTIwJmM9/cGZtV3EzeDRLSWNi/emlDUkRhcXk5amJK/c0o4djFHS1pObEg4/RFhZOW54QT0",
+    2: "https://imgs.search.brave.com/2aXDqyAvBkBVK_aEnb-Re6JMXPNBkPbVAd9EtP3F26s/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDExMTQz/MDAyLmpwZw",
+    3: "https://imgs.search.brave.com/2aXDqyAvBkBVK_aEnb-Re6JMXPNBkPbVAd9EtP3F26s/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDExMTQz/MDAyLmpwZw"
+  }
+};
+
 
     const tableBody = document.getElementById("table-body");
     const title = document.getElementById("title");
-
-    function updateTitle() {
-      if (mode === "myteam") {
-        title.textContent = `MyTeam - Cadillac (${season}. szezon)`;
-      } else {
-        title.textContent = `Visa Rb Career - (${season}. szezon)`; //Karrier csapat 
-      }
-    }
+	
+function updateTitle() {
+  const titleText = customTitles[mode]?.[season] || `${mode} - (${season}. szezon)`;
+  title.textContent = titleText;
+}
 
     function activateButtonGroup(prefix, selected) {
       for (let i = 1; i <= (prefix === "career" ? 3 : 2); i++) {
@@ -327,16 +342,22 @@ input {
       return doc(db, `${mode}`, `season-${season}`);
     }
 
-    async function loadTable() {
-      tableBody.innerHTML = "";
-      updateTitle();
-      activateButtonGroup("myteam", mode === "myteam" ? season : 0);
-      activateButtonGroup("career", mode === "career" ? season : 0);
-	  document.body.classList.remove("career-mode", "myteam-mode");
-document.body.classList.add(`${mode}-mode`);
+   async function loadTable() {
+  tableBody.innerHTML = "";
+  updateTitle();
+  activateButtonGroup("myteam", mode === "myteam" ? season : 0);
+  activateButtonGroup("career", mode === "career" ? season : 0);
 
-      const docSnap = await getDoc(getDocRef());
-      const data = docSnap.exists() ? docSnap.data() : {};
+  const bg = backgroundImages[mode]?.[season];
+  if (bg) {
+    document.body.style.backgroundImage = `url('${bg}')`;
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundPosition = "center center";
+  }
+
+  const docSnap = await getDoc(getDocRef());
+  const data = docSnap.exists() ? docSnap.data() : {};
 
       races.forEach((race, i) => {
         const row = document.createElement("tr");
